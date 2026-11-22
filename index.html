@@ -16,6 +16,8 @@
   #hud button { display:flex; align-items:center; gap:8px; width:100%; text-align:left; margin:4px 0; padding:7px 9px;
     background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:8px; color:var(--ink); cursor:pointer; font:inherit; }
   #hud button:hover { background:rgba(255,255,255,.1); }
+  #hudClose, #hudOpen { display:none; }
+  #hudOpen[hidden] { display:none; }
   #hud .dot { width:10px; height:10px; border-radius:50%; flex:none; }
   #hud .n { margin-left:auto; color:var(--dim); font-size:12px; }
   #hud .hint { margin-top:10px; font-size:11px; color:var(--dim); }
@@ -40,14 +42,25 @@
   #loading { position:fixed; inset:0; display:grid; place-items:center; color:var(--dim); z-index:10; background:#05070f; transition:opacity .6s; }
   @media (max-width: 700px) {
     #hud {
-      display:grid; grid-template-columns:minmax(0, 1fr) auto auto; gap:6px;
+      display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:6px;
       top:8px; left:8px; right:8px; width:auto; padding:10px;
     }
-    #hud h1 { grid-column:1 / -1; }
+    #hud.mobile-hidden { display:none; }
+    #hud h1 { grid-column:1; grid-row:1; }
+    #hudClose {
+      display:flex; grid-column:2; grid-row:1; justify-content:center;
+      width:36px; min-height:36px; margin:0; padding:0;
+    }
     #hud p, #hud .hint { display:none; }
-    #zoneButtons { display:flex; gap:6px; min-width:0; overflow-x:auto; }
+    #zoneButtons { grid-column:1 / -1; display:flex; gap:6px; min-width:0; overflow-x:auto; }
     #zoneButtons button { flex:none; width:auto; margin:0; white-space:nowrap; }
     #hud > #overviewBtn, #hud > #hexBtn { width:auto; min-height:38px; margin:0; white-space:nowrap; }
+    #hudOpen:not([hidden]) {
+      display:flex; align-items:center; position:fixed; top:8px; right:8px; z-index:6;
+      width:auto; min-height:40px; margin:0; padding:7px 12px;
+      background:var(--panel); border:1px solid var(--line); border-radius:10px;
+      color:var(--ink); cursor:pointer; font:inherit; backdrop-filter:blur(8px);
+    }
     #panel {
       top:auto; right:8px; bottom:8px; left:8px; width:auto;
       max-height:52vh; max-height:52dvh; padding:16px;
@@ -69,12 +82,14 @@
 
 <div id="hud">
   <h1>Tacit Mosaic Music Festival</h1>
+  <button id="hudClose" type="button" aria-label="Hide festival controls" aria-controls="hud">×</button>
   <p>Five tacit-knowledge categories as one night: a festival under an observing sky.</p>
   <div id="zoneButtons"></div>
   <button id="overviewBtn" style="justify-content:center;margin-top:8px">↺ Overview</button>
   <button id="hexBtn" style="justify-content:center"><span class="dot" style="background:#ffcf5a"></span>Look up: Winter Hexagon</button>
   <div class="hint">Drag to orbit · scroll to zoom · click a zone or label</div>
 </div>
+<button id="hudOpen" type="button" aria-label="Show festival controls" aria-controls="hud" aria-expanded="false" hidden>☰ Controls</button>
 
 <aside id="panel"><button id="close" aria-label="Close">×</button><div id="panelBody"></div></aside>
 
@@ -586,6 +601,21 @@ scene.add(jupiter);
 
 // ---------- Interaction ----------
 const panel = document.getElementById('panel'), body = document.getElementById('panelBody');
+const hud = document.getElementById('hud');
+const hudClose = document.getElementById('hudClose');
+const hudOpen = document.getElementById('hudOpen');
+hudClose.onclick = () => {
+  hud.classList.add('mobile-hidden');
+  hudOpen.hidden = false;
+  hudOpen.setAttribute('aria-expanded', 'false');
+  hudOpen.focus();
+};
+hudOpen.onclick = () => {
+  hud.classList.remove('mobile-hidden');
+  hudOpen.hidden = true;
+  hudOpen.setAttribute('aria-expanded', 'true');
+  hudClose.focus();
+};
 const FOCUS = {
   stage: { pos: [0, 30, 35], tgt: [0, 10, -55] },
   concessions: { pos: [25, 22, 30], tgt: [62, 4, 8] },

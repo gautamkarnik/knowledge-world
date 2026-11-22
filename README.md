@@ -8,6 +8,7 @@ An interactive 3D visualization that presents five areas of tacit knowledge as a
 - Drag to orbit around the festival and scroll to zoom.
 - Choose **Overview** to return to the full scene.
 - Choose **Look up: Winter Hexagon** to view the astronomy feature.
+- On mobile, use **×** to hide the controls and **Controls** to show them again.
 
 ## Run locally
 
