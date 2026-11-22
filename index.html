@@ -38,6 +38,24 @@
   .label b { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
   .star-label { font-size:10px; color:#9fb4ff; opacity:.75; pointer-events:none; letter-spacing:.5px; }
   #loading { position:fixed; inset:0; display:grid; place-items:center; color:var(--dim); z-index:10; background:#05070f; transition:opacity .6s; }
+  @media (max-width: 700px) {
+    #hud {
+      display:grid; grid-template-columns:minmax(0, 1fr) auto auto; gap:6px;
+      top:8px; left:8px; right:8px; width:auto; padding:10px;
+    }
+    #hud h1 { grid-column:1 / -1; }
+    #hud p, #hud .hint { display:none; }
+    #zoneButtons { display:flex; gap:6px; min-width:0; overflow-x:auto; }
+    #zoneButtons button { flex:none; width:auto; margin:0; white-space:nowrap; }
+    #hud > #overviewBtn, #hud > #hexBtn { width:auto; min-height:38px; margin:0; white-space:nowrap; }
+    #panel {
+      top:auto; right:8px; bottom:8px; left:8px; width:auto;
+      max-height:52vh; max-height:52dvh; padding:16px;
+      transform:translateY(calc(100% + 16px));
+    }
+    #panel.open { transform:translateY(0); }
+    #panel h2 { padding-right:32px; }
+  }
 </style>
 <script type="importmap">
 { "imports": {
